@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/dnozdrin/websockets/chat/server/http"
+	"github.com/dnozdrin/websockets/chat/server/websocket"
 	"go.uber.org/zap"
 	"log"
 	"os"
@@ -35,7 +36,12 @@ func main() {
 		http.Config{Port: 8081},
 		logger,
 	)
+	websocketServ := websocket.New(
+		websocket.Config{Port: 8088},
+		logger,
+	)
 	httpServ.Run(ctx, wg)
+	websocketServ.Run(ctx, wg)
 
 	wg.Wait()
 	log.Print("Server stopped")
